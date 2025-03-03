@@ -4,7 +4,7 @@ import './App.css';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth > 768);
 
   useEffect(() => {
     // Check if user is logged in from local storage
@@ -12,6 +12,14 @@ function App() {
     if (loggedInStatus === 'true') {
       setIsLoggedIn(true);
     }
+
+    // Handle window resize
+    const handleResize = () => {
+      setIsSidebarOpen(window.innerWidth > 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const handleLogin = (provider) => {
@@ -52,11 +60,11 @@ function App() {
           </div>
         ) : (
           <div className="main-container">
-            <button className="sidebar-toggle" onClick={toggleSidebar}>
-              {isSidebarOpen ? '←' : '→'}
+            <button className="menu-toggle" onClick={toggleSidebar}>
+              ☰
             </button>
             
-            <div className={`sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
+            <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
               <h2>Surgical Companion</h2>
               <nav>
                 <ul>
